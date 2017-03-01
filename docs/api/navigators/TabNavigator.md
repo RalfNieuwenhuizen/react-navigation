@@ -108,6 +108,7 @@ Several options get passed to the underlying router to modify navigation logic:
 - `showLabel` - whether to show label for tab, default is true
 - `style` - style object for the tab bar
 - `labelStyle` - style object for the tab label
+- `onTabPress` - optional callback invoked on tab press
 
 Example:
 
@@ -137,6 +138,7 @@ tabBarOptions: {
 - `indicatorStyle` - style object for the tab indicator (line at the bottom of the tab)
 - `labelStyle` - style object for the tab label
 - `style` - style object for the tab bar
+- `onTabPress` - optional callback invoked on tab press
 
 Example:
 
