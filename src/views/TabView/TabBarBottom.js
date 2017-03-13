@@ -38,6 +38,7 @@ type Props = {
   jumpToIndex: (index: number) => void;
   onTabPress: (route: NavigationRoute) => void;
   getLabel: (scene: TabScene) => ?(React.Element<*> | string);
+  getTabPressCallback: (scene: TabScene) => Function;
   renderIcon: (scene: TabScene) => React.Element<*>;
   showLabel: boolean;
   style?: Style;
@@ -87,19 +88,14 @@ export default class TabBarBottom extends PureComponent<DefaultProps, Props, Sta
   _keyboardDidHide = () => {
     this.setState({ keyboardVisible: false });
   }
-
-  _handleTabPress = (index: number) => {
-    const {
-      navigationState,
-      jumpToIndex,
-      onTabPress,
-    } = this.props;
-    jumpToIndex(index);
-    if (onTabPress) {
-      onTabPress(navigationState.routes[index]);
-    }
-  }
-
+  
+  _onTabPress = (scene: TabScene) => {
+    const { getTabPressCallback, jumpToIndex } = this.props
+    const onTabPress = getTabPressCallback(scene);
+    onTabPress(scene);
+    jumpToIndex(scene.index);
+  };
+  
   _renderLabel = (scene: TabScene) => {
     const {
       position,
@@ -195,10 +191,7 @@ export default class TabBarBottom extends PureComponent<DefaultProps, Props, Sta
           });
           const justifyContent = this.props.showIcon ? 'flex-end' : 'center';
           return (
-            <TouchableWithoutFeedback
-              key={route.key}
-              onPress={() => this._handleTabPress(index)}
-            >
+            <TouchableWithoutFeedback key={route.key} onPress={() => this._onTabPress(scene)}>
               <Animated.View style={[styles.tab, { backgroundColor, justifyContent }]}>
                 {this._renderIcon(scene)}
                 {this._renderLabel(scene)}
